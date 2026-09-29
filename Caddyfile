@@ -5,6 +5,7 @@
 # Routing:
 #   /app/*        -> web app   (smarthouse_webapp)
 #   /dashboard/*  -> dashboard
+#   /mobile/*     -> mobile app web preview (SmartWarehouse)
 #   everything else (/auth, /products, /ws, /actuator, /, ...) -> backend
 #
 # The two SPAs are served under a path prefix, which Caddy strips (handle_path)
@@ -25,6 +26,12 @@
 	# Dashboard under /dashboard — prefix stripped; SPA built with base '/dashboard/'.
 	handle_path /dashboard/* {
 		reverse_proxy dashboard:80
+	}
+
+	# Mobile app (Flutter web) under /mobile — prefix stripped; built with
+	# --base-href /mobile/app/. /mobile/ is a phone-frame preview page, /mobile/app/ the app.
+	handle_path /mobile/* {
+		reverse_proxy mobile:80
 	}
 
 	# Everything else → the backend at root. Catches the frontends' bare API
